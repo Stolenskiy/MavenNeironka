@@ -24,7 +24,7 @@ public class Neuron {
 		this.activationFunction = ActivationFunction.getRandomActivationFunction();
 		this.weights = new double[inputs.length];
 		for (int i = 0; i < weights.length; i++) {
-			weights[i] = new Random(3).nextFloat();
+			weights[i] = new Random().nextFloat();
 		}
 	}
 
@@ -33,7 +33,7 @@ public class Neuron {
 		this.inputs = new double[inputCount];
 		this.weights = new double[inputCount];
 		for (int i = 0; i < weights.length; i++) {
-			weights[i] = new Random(3).nextFloat();
+			weights[i] = new Random().nextFloat();
 		}
 		this.activationFunction = ActivationFunction.getRandomActivationFunction();
 

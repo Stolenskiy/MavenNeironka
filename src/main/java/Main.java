@@ -26,7 +26,7 @@ public class Main {
 		}
 
 		for (int i = 0; i < arr.length; i++) {
-			int i1 = new Random(3).nextInt(indexList.size());
+			int i1 = new Random().nextInt(indexList.size());
 			returnArr[i] = arr[indexList.get(i1)];
 			indexList.remove(i1);
 		}
@@ -35,54 +35,55 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		NeuralBuilder neuralBuilder = new NeuralBuilder(30, 3);
+		NeuralBuilder neuralBuilder = new NeuralBuilder(5, 3);
 
 		BufferedImage bufferedImageHSB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
 		BufferedImage bufferedImageRGB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
 		int[] randIndexs = new int[]{-1, -1, -1};
 		boolean b = true;
-
-		for (int i = 0; i < heightImage; i++) {
-			for (int j = 0; j < weightImage; j++) {
-				double d = calculateDistanceBetweenPoints(i, j, heightImage / 2, weightImage / 2);
+		for (int l = 0; l < 2; l++) {
+			for (int i = 0; i < heightImage; i++) {
+				for (int j = 0; j < weightImage; j++) {
+					double d = calculateDistanceBetweenPoints(i, j, heightImage / 2, weightImage / 2);
 
 
 //				neuralBuilder.feedForward(new double[]{d, i, j, Math.sqrt(Math.pow(i, 2) - Math.pow(j, 2))}); // феномен трикутника
-				neuralBuilder.feedForward(new double[]{i, j, d});
-				float outputs[] = new float[3];
-				List<Neuron> neuronList = new ArrayList<>(neuralBuilder.getNeuronList());
+					neuralBuilder.feedForward(new double[]{i, j, d});
+					float outputs[] = new float[3];
+					List<Neuron> neuronList = new ArrayList<>(neuralBuilder.getNeuronList());
 
-				if (randIndexs[0] == -1) randIndexs[0] = new Random(3).nextInt(neuronList.size() - 1);
-				if (randIndexs[1] == -1) randIndexs[1] = new Random(3).nextInt(neuronList.size() - 1);
-				if (randIndexs[2] == -1) randIndexs[2] = neuronList.size() - 1;
+					if (randIndexs[0] == -1) randIndexs[0] = new Random().nextInt(neuronList.size() - 1);
+					if (randIndexs[1] == -1) randIndexs[1] = new Random().nextInt(neuronList.size() - 1);
+					if (randIndexs[2] == -1) randIndexs[2] = neuronList.size() - 1;
 
-				if (b) {
-					randIndexs = randArr(randIndexs);
-					b = false;
+					if (b) {
+						randIndexs = randArr(randIndexs);
+						b = false;
+					}
+
+					outputs[0] = neuronList.get(randIndexs[0]).getOutputInProcent();
+					outputs[1] = neuronList.get(randIndexs[1]).getOutputInProcent();
+					outputs[2] = neuronList.get(randIndexs[2]).getOutputInProcent();
+
+					Color colorHSB = Color.getHSBColor(outputs[0], outputs[1], outputs[2]);
+					Color colorRGB = new Color(outputs[0], outputs[1], outputs[2]);
+					bufferedImageHSB.setRGB(j, i, colorHSB.getRGB());
+					bufferedImageRGB.setRGB(j, i, colorRGB.getRGB());
 				}
-
-				outputs[0] = neuronList.get(randIndexs[0]).getOutputInProcent();
-				outputs[1] = neuronList.get(randIndexs[1]).getOutputInProcent();
-				outputs[2] = neuronList.get(randIndexs[2]).getOutputInProcent();
-
-				Color colorHSB = Color.getHSBColor(outputs[0], outputs[1], outputs[2]);
-				Color colorRGB = new Color(outputs[0], outputs[1], outputs[2]);
-				bufferedImageHSB.setRGB(j, i, colorHSB.getRGB());
-				bufferedImageRGB.setRGB(j, i, colorRGB.getRGB());
 			}
-		}
-
-		File output = new File("hsb.png");
-		try {
-			ImageIO.write(bufferedImageHSB, "png", output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		output = new File("rgb.png");
-		try {
-			ImageIO.write(bufferedImageRGB, "png", output);
-		} catch (IOException e) {
-			e.printStackTrace();
+			neuralBuilder.addNewRandomNeuron();
+			File output = new File("hsb.png");
+			try {
+				ImageIO.write(bufferedImageHSB, "png", output);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			output = new File("rgb.png");
+			try {
+				ImageIO.write(bufferedImageRGB, "png", output);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Random;
 
 public enum ActivationFunction implements IActivationFunction {
-	SIGMOID() {
+	SIGMOID{
 		private static final double zero = 0;
 		private static final double handred = 1;
 
@@ -42,7 +42,7 @@ public enum ActivationFunction implements IActivationFunction {
 			return procentOfRange(zero, handred, number);
 		}
 	},
-	Krivoid {
+	KRIVOID {
 		private static final double zero = -3.318;
 		private static final double handred = 1.809;
 
@@ -88,7 +88,7 @@ public enum ActivationFunction implements IActivationFunction {
 	}
 
 	public static ActivationFunction getRandomActivationFunction() {
-		Random random = new Random(3);
+		Random random = new Random();
 		return ActivationFunction.values()[random.nextInt(ActivationFunction.values().length)];
 	}
 
