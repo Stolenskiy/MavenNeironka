@@ -1,32 +1,15 @@
-import org.apache.commons.lang.ArrayUtils;
-
-import java.util.ArrayList;
+import java.awt.*;
 import java.util.List;
-import java.util.Random;
 
 public class NeuralNetwork {
-	private List<Neuron> neuronList;
-	private List<Double> inputList;
+	private NeuralBuilder neuralBuilder;
+	private Color rgbColor;
+	private Color hsbColor;
 
-	public NeuralNetwork(int neuronCount) {
-		for (int i = 0; i < neuronCount; i++) {
-			neuronList.add(new Neuron());
-		}
+	public NeuralNetwork(int neuronCount, int firstInputCount) {
+		this.neuralBuilder = new NeuralBuilder(neuronCount, firstInputCount);
 	}
 
-	public List<Neuron> getNeuronList() {
-		return neuronList;
-	}
 
-	public void setNeuronList(List<Neuron> neuronList) {
-		this.neuronList = neuronList;
-	}
 
-	public List<Double> getInputList() {
-		return inputList;
-	}
-
-	public void setInputList(List<Double> inputList) {
-		this.inputList = inputList;
-	}
 }

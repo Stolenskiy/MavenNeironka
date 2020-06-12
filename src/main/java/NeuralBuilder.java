@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NeuralBuilder {
 	/**
@@ -81,15 +82,16 @@ public class NeuralBuilder {
 			}
 			neuron.setInputs(neuronInputs);
 			neuron.calculateOutput();
+
 		}
 
 	}
 
 	public void addNewRandomNeuron() {
 		Map<Integer, Set<Integer>> newInputIndexListByNeuronId = new HashMap<>();
+		int neuronId = new Random().nextInt(neuronList.size());
+
 		// визначаю в яке місце нейронної мережі запхати нейрон
-		int neuronId = 1;
-//		int neuronId = new Random().nextInt(neuronList.size());
 		// індекси входів в новий нейрон
 		Set<Integer> inputIndexSet = new HashSet<>();
 
@@ -111,12 +113,6 @@ public class NeuralBuilder {
 		Neuron neuron = new Neuron(inputIndexSet.size(), neuronId);
 		// ставлю нейрон на його місце в списку нейронів
 		neuronList.add(neuronId, neuron);
-		/*for (int i = 0; i < neuronList.size(); i++) {
-			if (neuronList.get(i).getId() == neuronId) {
-				neuronList.add(i, neuron);
-			}
-		}
-		*/
 
 		// зсуваю індекси інших нейронів
 		for (Integer key : inputIndexListByNeuronId.keySet()) {
@@ -136,6 +132,126 @@ public class NeuralBuilder {
 			neuronI.setId(neuronI.getId() + 1);
 		}
 		inputIndexListByNeuronId = newInputIndexListByNeuronId;
+
+		// створюю звязки із виходами даного нейрона
+		addNewOutputsForNeuron(neuronId);
+	}
+
+	public void removeRandomNeuron() {
+		Map<Integer, Set<Integer>> newInputIndexListByNeuronId = new HashMap<>();
+		int neuronId = new Random().nextInt(neuronList.size());
+
+		for (Integer key : inputIndexListByNeuronId.keySet()) {
+			if (key < neuronId) {
+				newInputIndexListByNeuronId.put(Integer.valueOf(key), new HashSet<>(inputIndexListByNeuronId.get(key)));
+			} else if (key > neuronId) {
+				HashSet<Integer> indexSet = new HashSet<>();
+				for (Integer index : inputIndexListByNeuronId.get(key)) {
+					if (index > neuronId) {
+						indexSet.add(index - 1);
+					} else if (index < neuronId) {
+						indexSet.add(index);
+					}
+				}
+				newInputIndexListByNeuronId.put(Integer.valueOf(key - 1), new HashSet<>(indexSet));
+			}
+		}
+
+		neuronList.remove(neuronId);
+		// зменшую id інших нейронів
+		for (int i = neuronId; i < neuronList.size(); i++) {
+			Neuron neuron = neuronList.get(i);
+			neuron.setId(neuron.getId() - 1);
+		}
+
+		inputIndexListByNeuronId = newInputIndexListByNeuronId;
+	}
+
+	public void removeRandomInputForRandomNeuron() {
+		int neuronId = new Random().nextInt(neuronList.size());
+		Set<Integer> inputIndexSet = inputIndexListByNeuronId.get(neuronId);
+		inputIndexSet.remove(new Random().nextInt(inputIndexSet.size()));
+	}
+
+	public void changeWeightsForRandomNeuron() {
+		int neuronId = new Random().nextInt(neuronList.size());
+		Neuron neuron = neuronList.get(neuronId);
+		double[] weights = neuron.getWeights();
+
+		List<Integer> weightIndexList = new ArrayList<>();
+
+		//к-ть ваг, які буде відкореговано
+		int changeCount = new Random().nextInt(weights.length);
+
+		for (int i = 0; i < weights.length; i++) {
+			weightIndexList.add(i);
+		}
+
+		for (int i = 0; i < changeCount; i++) {
+			int index = weightIndexList.get(new Random().nextInt(weightIndexList.size()));
+
+			// коефіцієнт на який буде змінено вагу [-0.5; 0.5]
+			double delta = new Random().nextDouble() - 0.5;
+
+			weights[index] += delta;
+
+			weightIndexList.remove(Integer.valueOf(index));
+		}
+
+		neuron.setWeights(weights);
+	}
+
+	public void addNewOutputsForRandomNeuron() {
+		addNewOutputsForNeuron(new Random().nextInt(neuronList.size() - 2));
+	}
+
+	public void addNewOutputsForNeuron(int neuronId) {
+		// ф-ція створить нові виходи від одного нейрона до інших
+		if (neuronList.size() - (neuronId + 1) <= 0) {
+			// немає нейронів котрі моглиб прийняти вихід цього нейрона
+			return;
+		}
+
+		//
+		int outputCount = new Random().nextInt(neuronList.size() - (neuronId + 1)) + 1;
+
+		// список можливих індексів в нейрон в котрі можна запхнути вихід даного нейрона
+		List<Integer> inputNeuronIndexs = new ArrayList<>();
+
+		for (int i = neuronId + 1; i < neuronList.size(); i++) {
+			inputNeuronIndexs.add(i);
+		}
+
+		for (int i = 0; i < outputCount; i++) {
+			int index = new Random().nextInt(inputNeuronIndexs.size());
+			Neuron neuron = neuronList.get(inputNeuronIndexs.get(index));
+			// збільшою к-ть входів в рандомний нейрон
+			List<Double> inputList = Arrays.stream(neuron.getInputs())
+					.boxed()
+					.collect(Collectors.toList());
+			inputList.add(1d);
+			double[] newInputs = new double[inputList.size()];
+			for (int nI = 0; nI < newInputs.length; nI++) {
+				newInputs[nI] = inputList.get(nI);
+			}
+			neuron.setInputs(newInputs);
+			// збільшую к-ть ваг нейрона
+			List<Double> weightsList = Arrays.stream(neuron.getWeights())
+					.boxed()
+					.collect(Collectors.toList());
+			weightsList.add(new Random().nextDouble());
+			double[] newWeights = new double[weightsList.size()];
+			for (int nI = 0; nI < newWeights.length; nI++) {
+				newWeights[nI] = weightsList.get(nI);
+			}
+			neuron.setWeights(newWeights);
+
+			// запам'ятовую новий вхід в рандомний нейрон
+			inputIndexListByNeuronId.get(inputNeuronIndexs.get(index)).add(neuronId);
+
+			// видаляю даний індекс нейрона із можливих індексів для призначення вихода, уникаю повторень
+			inputNeuronIndexs.remove(index);
+		}
 
 	}
 
@@ -166,5 +282,6 @@ public class NeuralBuilder {
 	public void setInputIndexListByNeuronId(Map<Integer, Set<Integer>> inputIndexListByNeuronId) {
 		this.inputIndexListByNeuronId = inputIndexListByNeuronId;
 	}
+
 
 }

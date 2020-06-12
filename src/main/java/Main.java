@@ -35,20 +35,23 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		NeuralBuilder neuralBuilder = new NeuralBuilder(5, 3);
+		NeuralBuilder neuralBuilder = new NeuralBuilder(30, 4);
 
 		BufferedImage bufferedImageHSB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
 		BufferedImage bufferedImageRGB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
 		int[] randIndexs = new int[]{-1, -1, -1};
 		boolean b = true;
-		for (int l = 0; l < 2; l++) {
+		for (int epoh = 0; epoh < 2; epoh++) {
+
+
 			for (int i = 0; i < heightImage; i++) {
 				for (int j = 0; j < weightImage; j++) {
 					double d = calculateDistanceBetweenPoints(i, j, heightImage / 2, weightImage / 2);
+					double r = ((heightImage / 2) + (weightImage / 2)) / 2;
+//					double r = heightImage / 2;
+//				neuralBuilder.feedForward(new double[]{d, Math.sqrt(Math.pow(i, 2) - Math.pow(j, 2))}); // феномен трикутника
 
-
-//				neuralBuilder.feedForward(new double[]{d, i, j, Math.sqrt(Math.pow(i, 2) - Math.pow(j, 2))}); // феномен трикутника
-					neuralBuilder.feedForward(new double[]{i, j, d});
+					neuralBuilder.feedForward(new double[]{i, j, d, r});
 					float outputs[] = new float[3];
 					List<Neuron> neuronList = new ArrayList<>(neuralBuilder.getNeuronList());
 
@@ -72,6 +75,10 @@ public class Main {
 				}
 			}
 			neuralBuilder.addNewRandomNeuron();
+			neuralBuilder.removeRandomInputForRandomNeuron();
+			neuralBuilder.changeWeightsForRandomNeuron();
+			neuralBuilder.addNewOutputsForNeuron(15);
+			neuralBuilder.removeRandomNeuron();
 			File output = new File("hsb.png");
 			try {
 				ImageIO.write(bufferedImageHSB, "png", output);
@@ -86,34 +93,4 @@ public class Main {
 			}
 		}
 	}
-
-
-	/*public static void main(String[] args) {
-		BufferedImage bufferedImage = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
-		NeuralNetwork neuralNetwork;
-		for (int i = 0; i < heightImage; i++) {
-			for (int j = 0; j < weightImage; j++) {
-				float d = calculateDistanceBetweenPoints(i, j, heightImage / 2, weightImage / 2);
-				neuralNetwork = new NeuralNetwork(7, new double[]{i, j, d});
-
-				float outputs[] = new float[3];
-				List<Neuron> neuronList = new ArrayList<>(neuralNetwork.getNeuronList());
-
-				outputs[0] = neuronList.get(6).getOutputInProcent();
-				outputs[1] = neuronList.get(3).getOutputInProcent();
-				outputs[2] = neuronList.get(4).getOutputInProcent();
-
-				Color color = new Color(outputs[0], outputs[1], outputs[2]);
-				bufferedImage.setRGB(j, i, color.getRGB());
-			}
-		}
-
-		File output = new File("afterNeuralNetworkImage.png");
-		try {
-			ImageIO.write(bufferedImage, "png", output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}*/
 }
