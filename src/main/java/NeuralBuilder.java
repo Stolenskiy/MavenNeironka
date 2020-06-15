@@ -10,6 +10,8 @@ public class NeuralBuilder implements Serializable {
 	private List<Neuron> neuronList;
 	private Map<Integer, Set<Integer>> inputIndexListByNeuronId;
 	private Set<Integer> allIndexSet;
+	private int[] returnIndexs;
+
 
 	public NeuralBuilder() {
 	}
@@ -136,7 +138,15 @@ public class NeuralBuilder implements Serializable {
 
 		// створюю звязки із виходами даного нейрона
 		addNewOutputsForNeuron(neuronId);
+
 		calculateAllIndexSet();
+		if (returnIndexs != null) {
+			for (int i = 0; i < returnIndexs.length; i++) {
+				if (returnIndexs[i] >= neuronId) {
+					returnIndexs[i] = returnIndexs[i] + 1;
+				}
+			}
+		}
 	}
 
 	public void removeRandomNeuron() {
@@ -168,12 +178,22 @@ public class NeuralBuilder implements Serializable {
 
 		inputIndexListByNeuronId = newInputIndexListByNeuronId;
 		calculateAllIndexSet();
+		if (returnIndexs != null) {
+			for (int i = 0; i < returnIndexs.length; i++) {
+				if (returnIndexs[i] >= neuronId) {
+					if (returnIndexs[i] > 0) {
+						returnIndexs[i] = returnIndexs[i] - 1;
+					}
+				}
+			}
+		}
 	}
 
 	public void removeRandomInputForRandomNeuron() {
 		int neuronId = new Random().nextInt(neuronList.size());
 		Set<Integer> inputIndexSet = inputIndexListByNeuronId.get(neuronId);
 		inputIndexSet.remove(new Random().nextInt(inputIndexSet.size()));
+		inputIndexListByNeuronId.put(neuronId, inputIndexSet);
 	}
 
 	public void changeWeightsForRandomNeuron() {
@@ -258,6 +278,23 @@ public class NeuralBuilder implements Serializable {
 
 	}
 
+	public void changeReturnRandomIndexs() {
+		returnIndexs = null;
+		returnIndexs = getReturnIndexs();
+	}
+
+	public int[] getReturnIndexs() {
+		if (returnIndexs == null) {
+			// індекси можуть повторюватись!
+			returnIndexs = new int[3];
+			returnIndexs[0] = neuronList.size() - 1;
+			returnIndexs[1] = new Random().nextInt(neuronList.size() - 1);
+			returnIndexs[2] = new Random().nextInt(neuronList.size() - 1);
+			returnIndexs = randArr(returnIndexs);
+		}
+		return returnIndexs;
+	}
+
 	private void indexMapIncrement(Map<Integer, Set<Integer>> newInputIndexListByNeuronId, int neuronId, int key) {
 		HashSet<Integer> indexSet = new HashSet<>();
 		for (Integer index : inputIndexListByNeuronId.get(key)) {
@@ -269,6 +306,36 @@ public class NeuralBuilder implements Serializable {
 		}
 		newInputIndexListByNeuronId.put(Integer.valueOf(key + 1), new HashSet<>(indexSet));
 	}
+
+	private void calculateAllIndexSet() {
+		Set<Integer> newIndexSet = new HashSet<>();
+
+		for (Integer integer : allIndexSet) {
+			if (integer < 0) newIndexSet.add(integer);
+		}
+
+		for (Neuron neuron : neuronList) {
+			newIndexSet.add(neuron.getId());
+		}
+		allIndexSet = newIndexSet;
+	}
+
+	private int[] randArr(int[] arr) {
+		int[] returnArr = new int[arr.length];
+		List<Integer> indexList = new ArrayList();
+		for (int i = 0; i < arr.length; i++) {
+			indexList.add(i);
+		}
+
+		for (int i = 0; i < arr.length; i++) {
+			int i1 = new Random().nextInt(indexList.size());
+			returnArr[i] = arr[indexList.get(i1)];
+			indexList.remove(i1);
+		}
+
+		return returnArr;
+	}
+
 
 	public List<Neuron> getNeuronList() {
 		return neuronList;
@@ -294,16 +361,4 @@ public class NeuralBuilder implements Serializable {
 		this.allIndexSet = allIndexSet;
 	}
 
-	private void calculateAllIndexSet() {
-		Set<Integer> newIndexSet = new HashSet<>();
-
-		for (Integer integer : allIndexSet) {
-			if (integer < 0) newIndexSet.add(integer);
-		}
-
-		for (Neuron neuron : neuronList) {
-			newIndexSet.add(neuron.getId());
-		}
-		allIndexSet = newIndexSet;
-	}
 }

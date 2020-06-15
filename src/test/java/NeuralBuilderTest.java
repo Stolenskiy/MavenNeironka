@@ -1,13 +1,10 @@
 class NeuralBuilderTest {
 
 	public static void main(String[] args) {
-		NeuralBuilder neuralBuilder = new NeuralBuilder(20, 4);
-		neuralBuilder.feedForward(new double[]{1, 2, 3, 4});
+		NeuralNetwork neuralNetwork = new NeuralNetwork(10, 5, 3);
 
-		NeuralNetwork.serializebleObject(neuralBuilder, "neuralBilder.obj");
-		NeuralBuilder clone = (NeuralBuilder) NeuralNetwork.deserializebleObject("neuralBilder.obj");
-
-		clone.removeRandomNeuron();
-		System.out.println(clone);
+		neuralNetwork.feedForward(new double[]{1, 2, 3});
+		neuralNetwork.getHsbColor(1);
+		neuralNetwork.evolute(1);
 	}
 }
