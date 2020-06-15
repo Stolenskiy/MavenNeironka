@@ -1,8 +1,10 @@
 import Enums.ActivationFunction;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Random;
 
-public class Neuron {
+public class Neuron implements Serializable {
 	private double inputs[];
 	private double weights[];
 	private double output;
@@ -57,6 +59,10 @@ public class Neuron {
 		return output;
 	}
 
+	public void setOutput(double output) {
+		this.output = output;
+	}
+
 	public double[] getInputs() {
 		return inputs;
 	}
@@ -72,10 +78,6 @@ public class Neuron {
 
 	public void setWeights(double[] weights) {
 		this.weights = weights;
-	}
-
-	public void setOutput(double output) {
-		this.output = output;
 	}
 
 	public ActivationFunction getActivationFunction() {

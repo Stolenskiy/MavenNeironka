@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NeuralBuilder {
+public class NeuralBuilder implements Serializable {
 	/**
 	 * Клас повинен контролювати в який нейрон які входи повинні бути,
 	 * а також змінювати кількість нейронів, і типи зв'язків між ними
@@ -135,6 +136,7 @@ public class NeuralBuilder {
 
 		// створюю звязки із виходами даного нейрона
 		addNewOutputsForNeuron(neuronId);
+		calculateAllIndexSet();
 	}
 
 	public void removeRandomNeuron() {
@@ -156,7 +158,7 @@ public class NeuralBuilder {
 				newInputIndexListByNeuronId.put(Integer.valueOf(key - 1), new HashSet<>(indexSet));
 			}
 		}
-
+		allIndexSet.remove(neuronId);
 		neuronList.remove(neuronId);
 		// зменшую id інших нейронів
 		for (int i = neuronId; i < neuronList.size(); i++) {
@@ -165,6 +167,7 @@ public class NeuralBuilder {
 		}
 
 		inputIndexListByNeuronId = newInputIndexListByNeuronId;
+		calculateAllIndexSet();
 	}
 
 	public void removeRandomInputForRandomNeuron() {
@@ -283,5 +286,24 @@ public class NeuralBuilder {
 		this.inputIndexListByNeuronId = inputIndexListByNeuronId;
 	}
 
+	public Set<Integer> getAllIndexSet() {
+		return allIndexSet;
+	}
 
+	public void setAllIndexSet(Set<Integer> allIndexSet) {
+		this.allIndexSet = allIndexSet;
+	}
+
+	private void calculateAllIndexSet() {
+		Set<Integer> newIndexSet = new HashSet<>();
+
+		for (Integer integer : allIndexSet) {
+			if (integer < 0) newIndexSet.add(integer);
+		}
+
+		for (Neuron neuron : neuronList) {
+			newIndexSet.add(neuron.getId());
+		}
+		allIndexSet = newIndexSet;
+	}
 }
