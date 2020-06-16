@@ -74,8 +74,18 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
-			System.out.print("Ввід: ");
-			int index = scanner.nextInt();
+			int index = 5;
+			for (; ; ) {
+				try {
+					System.out.print("Ввід: ");
+
+					String line = scanner.nextLine();
+					index = Integer.valueOf(line);
+					break;
+				} catch (Exception ex) {
+
+				}
+			}
 			neuralNetwork.evolute(index);
 		}
 	}

@@ -81,6 +81,44 @@ public enum ActivationFunction implements IActivationFunction {
 		public float procentOfRange(double number) {
 			return procentOfRange(zero, handred, number);
 		}
+	},
+	SINNAX {
+		private static final double zero = -0.2;
+		private static final double handred = 1;
+
+		@Override
+		public double function(double x) {
+			return Math.sin(x)/x;
+		}
+
+		@Override
+		public float functionInProcent(double x) {
+			return procentOfRange(function(x));
+		}
+
+		@Override
+		public float procentOfRange(double number) {
+			return procentOfRange(zero, handred, number);
+		}
+	},
+	SIGN {
+		private static final double zero = -5;
+		private static final double handred = 5;
+
+		@Override
+		public double function(double x) {
+			return 5 * Math.signum(Math.cos(x));
+		}
+
+		@Override
+		public float functionInProcent(double x) {
+			return procentOfRange(function(x));
+		}
+
+		@Override
+		public float procentOfRange(double number) {
+			return procentOfRange(zero, handred, number);
+		}
 	};
 
 	public static float procentOfRange(double zero, double handred, double number) {

@@ -1,3 +1,5 @@
+import Enums.ActivationFunction;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -288,6 +290,12 @@ public class NeuralBuilder implements Serializable {
 	public void changeReturnRandomIndexs() {
 		returnIndexs = null;
 		returnIndexs = getReturnIndexs();
+	}
+
+	public void changeActivationFunctinForRandomNeuron() {
+		int neuronId = new Random().nextInt(neuronList.size());
+
+		neuronList.get(neuronId).setActivationFunction(ActivationFunction.getRandomActivationFunction());
 	}
 
 	public int[] getReturnIndexs() {

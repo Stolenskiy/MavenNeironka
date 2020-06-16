@@ -107,7 +107,7 @@ public class NeuralNetwork implements Serializable {
 			 */
 			int mutationCount = new Random().nextInt(7) + 1;// к-ть мутацій
 			for (int mC = 0; mC < mutationCount; mC++) {
-				switch (new Random().nextInt(6)) {
+				switch (new Random().nextInt(7)) {
 					case 0:
 						cloneNB.addNewRandomNeuron();
 						changed += "0; ";
@@ -132,6 +132,10 @@ public class NeuralNetwork implements Serializable {
 						cloneNB.changeReturnRandomIndexs();
 						changed += "5; ";
 						break;
+					case 6:
+						cloneNB.changeActivationFunctinForRandomNeuron();
+						changed += "6; ";
+						break;
 				}
 			}
 			changed = changed.replaceAll("0", "Додано новий рандомний нейрон");
@@ -140,6 +144,7 @@ public class NeuralNetwork implements Serializable {
 			changed = changed.replaceAll("3", "Змінено ваги для рандомного нейрона");
 			changed = changed.replaceAll("4", "Додано рандомну к-ть виходів для рандомного нейрона");
 			changed = changed.replaceAll("5", "Змінено результуючі індекси");
+			changed = changed.replaceAll("6", "Змінено ф-цію активації для нейрона");
 			changed = changed.replaceAll("; ", "\n");
 			cloneNB.changed = changed;
 
