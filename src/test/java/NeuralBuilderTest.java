@@ -1,10 +1,25 @@
 class NeuralBuilderTest {
 
 	public static void main(String[] args) {
-		NeuralNetwork neuralNetwork = new NeuralNetwork(10, 5, 3);
+		double my = 0.01785;
+		double sigma = Math.sqrt(500);
+		double a = 1 / (sigma * Math.sqrt(2 * Math.PI));
+		double max = 0;
+		double min = 0;
+		for (int x = -300; x < 500; x++) {
+			double y = a * Math.exp(-Math.pow(x - my, 2) / (2 * Math.pow(sigma, 2)));
 
-		neuralNetwork.feedForward(new double[]{1, 2, 3});
-		neuralNetwork.getHsbColor(1);
-		neuralNetwork.evolute(1);
+			if (y > max) {
+				max = y;
+				System.out.println("Max = " + max);
+				System.out.println("Min = " + min);
+			}
+			if (y < min) {
+				min = y;
+				System.out.println("Max = " + max);
+				System.out.println("Min = " + min);
+			}
+		}
+
 	}
 }

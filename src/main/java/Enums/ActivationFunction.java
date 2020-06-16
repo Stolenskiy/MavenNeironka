@@ -1,10 +1,9 @@
 package Enums;
 
-import java.util.Map;
 import java.util.Random;
 
 public enum ActivationFunction implements IActivationFunction {
-	SIGMOID{
+	SIGMOID {
 		private static final double zero = 0;
 		private static final double handred = 1;
 
@@ -48,7 +47,7 @@ public enum ActivationFunction implements IActivationFunction {
 
 		@Override
 		public double function(double x) {
-			return (Math.sin(x) - Math.exp(Math.cos(-x/2)) / 2) + Math.sin(x/5);
+			return (Math.sin(x) - Math.exp(Math.cos(-x / 2)) / 2) + Math.sin(x / 5);
 		}
 
 		@Override
@@ -63,11 +62,14 @@ public enum ActivationFunction implements IActivationFunction {
 	},
 	GAUSIAN {
 		private static final double zero = 0;
-		private static final double handred = 0.4;
+		private static final double handred = 0.01785;
 
 		@Override
 		public double function(double x) {
-			return (1 / (Math.sqrt(2 * Math.PI))) * Math.exp(-Math.pow(x, 2)/2);
+			double my = 100;
+			double sigma = Math.sqrt(500);
+			double a = 1 / (sigma * Math.sqrt(2 * Math.PI));
+			return a * Math.exp(-Math.pow(x - my, 2) / (2 * Math.pow(sigma, 2)));
 		}
 
 		@Override

@@ -3,6 +3,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class NeuralBuilder implements Serializable {
+	String changed;
 	/**
 	 * Клас повинен контролювати в який нейрон які входи повинні бути,
 	 * а також змінювати кількість нейронів, і типи зв'язків між ними
@@ -150,6 +151,9 @@ public class NeuralBuilder implements Serializable {
 	}
 
 	public void removeRandomNeuron() {
+		if (neuronList.size() < 2) {
+			return;
+		}
 		Map<Integer, Set<Integer>> newInputIndexListByNeuronId = new HashMap<>();
 		int neuronId = new Random().nextInt(neuronList.size());
 
@@ -192,8 +196,10 @@ public class NeuralBuilder implements Serializable {
 	public void removeRandomInputForRandomNeuron() {
 		int neuronId = new Random().nextInt(neuronList.size());
 		Set<Integer> inputIndexSet = inputIndexListByNeuronId.get(neuronId);
-		inputIndexSet.remove(new Random().nextInt(inputIndexSet.size()));
-		inputIndexListByNeuronId.put(neuronId, inputIndexSet);
+		if (inputIndexSet.size() > 0) {
+			inputIndexSet.remove(new Random().nextInt(inputIndexSet.size()));
+			inputIndexListByNeuronId.put(neuronId, inputIndexSet);
+		}
 	}
 
 	public void changeWeightsForRandomNeuron() {
@@ -225,6 +231,7 @@ public class NeuralBuilder implements Serializable {
 	}
 
 	public void addNewOutputsForRandomNeuron() {
+		if (neuronList.size() - 2 <= 0) return;
 		addNewOutputsForNeuron(new Random().nextInt(neuronList.size() - 2));
 	}
 
@@ -288,8 +295,19 @@ public class NeuralBuilder implements Serializable {
 			// індекси можуть повторюватись!
 			returnIndexs = new int[3];
 			returnIndexs[0] = neuronList.size() - 1;
-			returnIndexs[1] = new Random().nextInt(neuronList.size() - 1);
-			returnIndexs[2] = new Random().nextInt(neuronList.size() - 1);
+			int index;
+			if (neuronList.size() - 1 > 0) {
+				index = new Random().nextInt(neuronList.size() - 1);
+			} else {
+				index = 0;
+			}
+			returnIndexs[1] = index;
+			if (neuronList.size() - 1 > 0) {
+				index = new Random().nextInt(neuronList.size() - 1);
+			} else {
+				index = 0;
+			}
+			returnIndexs[2] = index;
 			returnIndexs = randArr(returnIndexs);
 		}
 		return returnIndexs;

@@ -36,10 +36,10 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		int builderCount = 6;
+		int builderCount = 15;
 		Scanner scanner = new Scanner(System.in);
 
-		NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 20, 4);
+		NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
 
 		BufferedImage bufferedImageHSB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
 		BufferedImage bufferedImageRGB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
@@ -48,9 +48,10 @@ public class Main {
 
 				for (int i = 0; i < heightImage; i++) {
 					for (int j = 0; j < weightImage; j++) {
+
 						double d = calculateDistanceBetweenPoints(i, j, heightImage / 2, weightImage / 2);
-						double r = ((heightImage / 2) + (weightImage / 2)) / 2;
-						neuralNetwork.feedForward(new double[]{i, j, d, -d});
+
+						neuralNetwork.feedForward(new double[]{i, j, d});
 
 						Color colorHSB = neuralNetwork.getHsbColor(b);
 						Color colorRGB = neuralNetwork.getRgbColor(b);
@@ -60,13 +61,13 @@ public class Main {
 					}
 				}
 
-				File output = new File("image\\\\" + (b + 1) + "_hsb.png");
+				File output = new File("image\\\\" + b + "_hsb.png");
 				try {
 					ImageIO.write(bufferedImageHSB, "png", output);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				output = new File("image\\\\" + (b + 1) + "_rgb.png");
+				output = new File("image\\\\" + b + "_rgb.png");
 				try {
 					ImageIO.write(bufferedImageRGB, "png", output);
 				} catch (IOException e) {
@@ -74,7 +75,8 @@ public class Main {
 				}
 			}
 			System.out.print("Ввід: ");
-			neuralNetwork.evolute(scanner.nextInt() - 1);
+			int index = scanner.nextInt();
+			neuralNetwork.evolute(index);
 		}
 	}
 
