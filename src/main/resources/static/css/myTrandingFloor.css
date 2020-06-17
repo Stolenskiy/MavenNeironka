@@ -1,0 +1,17 @@
+.my-discount {
+    font-size: 334%;
+    color: #4b379a;
+    font-weight: 400;
+}
+
+.my-price {
+    color: black;
+    font-size: 300%;
+    font-style: italic;
+    margin-left: 5%;
+}
+
+.my-img-each {
+    width: 316px;
+    height: 100%;
+}
