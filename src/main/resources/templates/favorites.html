@@ -9,7 +9,7 @@
             <div class="row">
                 <div th:each="img : ${favoriteImages}" class="col-md-3 image-col">
                     <div class="single-service">
-                        <img class="img-fluid gallery-img" th:src="${img}"/>
+                        <img class="img-fluid gallery-img" th:src="${img}" src="${img}"/>
                     </div>
                 </div>
             </div>

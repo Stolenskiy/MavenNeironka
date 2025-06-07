@@ -11,10 +11,10 @@
                 <div class="row">
                     <div th:each="imageDir : ${imageList}" class="col-md-3 image-col">
                         <a style="display:block"
-                           th:href="@{/selectedImage(imageDir=${imageDir})}">
+                           th:href="@{/selectedImage(imageDir=${imageDir})}" href="/selectedImage?imageDir=${imageDir}">
                             <div class="single-service">
                                 <img class="img-fluid gallery-img"
-                                     th:src="${imageDir}"/>
+                                     th:src="${imageDir}" src="${imageDir}"/>
                             </div>
                         </a>
                         <input type="checkbox" name="selectedImages"
