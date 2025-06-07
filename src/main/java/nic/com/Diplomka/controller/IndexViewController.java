@@ -73,7 +73,7 @@ public class IndexViewController {
 
     private List<String> getImageList() {
         List<String> imageList = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < GeneratorService.builderCount; i++) {
             imageList.add("image_db/" + i + "_hsb.png");
             imageList.add("image_db/" + i + "_rgb.png");
         }
