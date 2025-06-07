@@ -1,0 +1,16 @@
+image: maven:3.8.7-jdk-17
+
+stages:
+  - test
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode"
+
+verify:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS verify
+  artifacts:
+    when: always
+    paths:
+      - target/site/jacoco
