@@ -1,4 +1,5 @@
 import nic.com.Diplomka.controller.IndexViewController;
+import nic.com.Diplomka.service.FavoriteService;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.*;
@@ -8,8 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SaveFavoritesNetworkFileTest {
     @Test
     void testNetworkFileCreated() throws IOException {
-        IndexViewController controller = new IndexViewController();
-        Path favDir = Paths.get("favorite_images");
+        FavoriteService service = new FavoriteService();
+        IndexViewController controller = new IndexViewController(service);
+        Path favDir = Paths.get("src/main/resources/favorite_images");
         if (Files.exists(favDir)) {
             Files.walk(favDir)
                     .filter(Files::isRegularFile)
