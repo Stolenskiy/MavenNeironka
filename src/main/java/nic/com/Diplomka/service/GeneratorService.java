@@ -11,7 +11,7 @@ import java.io.IOException;
 public class GeneratorService {
 	public static final int heightImage = 250;
 	public static final int weightImage = 250;
-	public static int builderCount = 15;
+        public static int builderCount = 16;
 	public static NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
 
 	public static double calculateDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
