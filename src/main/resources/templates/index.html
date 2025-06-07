@@ -17,6 +17,9 @@
                                      th:src="${imageDir}"/>
                             </div>
                         </a>
+                        <a th:href="@{/editNeural(imageDir=${imageDir})}" class="ml-2">
+                            <i class="fa fa-cogs"></i>
+                        </a>
                         <input type="checkbox" name="selectedImages"
                                th:value="${imageDir}"/>
                     </div>
