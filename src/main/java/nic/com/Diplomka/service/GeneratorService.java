@@ -1,18 +1,32 @@
 package nic.com.Diplomka.service;
 
 import nic.com.Diplomka.neuralNetwork.NeuralNetwork;
-import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class GeneratorService {
-	public static final int heightImage = 250;
-	public static final int weightImage = 250;
+        public static final String DEFAULT_SIZE = "250";
+        public static final int heightImage;
+        public static final int weightImage;
         public static int builderCount = 16;
-	public static NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
+        public static NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
+
+        static {
+                Properties properties = new Properties();
+                try (InputStream in = GeneratorService.class.getClassLoader().getResourceAsStream("application.properties")) {
+                        if (in != null) {
+                                properties.load(in);
+                        }
+                } catch (IOException ignored) {
+                }
+                heightImage = Integer.parseInt(properties.getProperty("app.image.height", DEFAULT_SIZE));
+                weightImage = Integer.parseInt(properties.getProperty("app.image.width", DEFAULT_SIZE));
+        }
 
 	public static double calculateDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
 		double ac = Math.abs(y2 - y1);

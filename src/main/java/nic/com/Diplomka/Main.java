@@ -1,6 +1,7 @@
 package nic.com.Diplomka;
 
 import nic.com.Diplomka.neuralNetwork.NeuralNetwork;
+import nic.com.Diplomka.service.GeneratorService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,8 +14,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-	public static final int heightImage = 250;
-	public static final int weightImage = 250;
 
 	public static double calculateDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
 		double ac = Math.abs(y2 - y1);
@@ -43,17 +42,17 @@ public class Main {
                 int builderCount = 16;
 		Scanner scanner = new Scanner(System.in);
 
-		NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
+        NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
 
-		BufferedImage bufferedImageHSB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
-		BufferedImage bufferedImageRGB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bufferedImageHSB = new BufferedImage(GeneratorService.weightImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bufferedImageRGB = new BufferedImage(GeneratorService.weightImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
 		while (true) {
 			for (int b = 0; b < builderCount; b++) {
 
-				for (int i = 0; i < heightImage; i++) {
-					for (int j = 0; j < weightImage; j++) {
+                                for (int i = 0; i < GeneratorService.heightImage; i++) {
+                                        for (int j = 0; j < GeneratorService.weightImage; j++) {
 
-						double d = calculateDistanceBetweenPoints(i, j, heightImage / 2, weightImage / 2);
+                                                double d = calculateDistanceBetweenPoints(i, j, GeneratorService.heightImage / 2, GeneratorService.weightImage / 2);
 
 						neuralNetwork.feedForward(new double[]{i, j, d});
 
