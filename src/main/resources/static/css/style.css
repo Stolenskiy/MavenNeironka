@@ -31,3 +31,16 @@
     margin-top: 0;
     background: none;
 }
+
+/* Custom navbar styling */
+.navbar-custom {
+    background-color: rgba(0,0,0,0.8);
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+.navbar-custom .nav-link:hover {
+    color: #f0ad4e !important;
+}

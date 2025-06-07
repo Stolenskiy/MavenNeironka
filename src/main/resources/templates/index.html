@@ -2,24 +2,7 @@
 <html lang="zxx" class="no-js" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments.html :: common_head('Pemodule')"></head>
 <body>
-<div class="main-wrapper-first">
-    <div class="hero-area relative">
-        <header th:replace="fragments.html :: navbar"></header>
-        <div class="banner-area">
-            <div class="overlay overlay-bg"></div>
-            <div class="container">
-                <div class="row height align-items-center justify-content-center">
-                    <div class="col-lg-7">
-                        <div class="banner-content text-center">
-                            <h4 class="text-uppercase">a new era</h4>
-                            <h1>of art</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="fragments.html :: hero('of art','a new era')"></div>
 <div class="main-wrapper">
 
     <section class="service-area">

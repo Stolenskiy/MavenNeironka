@@ -2,23 +2,7 @@
 <html lang="zxx" class="no-js" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments.html :: common_head('Favorites')"></head>
 <body>
-<div class="main-wrapper-first">
-    <div class="hero-area relative">
-        <header th:replace="fragments.html :: navbar"></header>
-        <div class="banner-area">
-            <div class="overlay overlay-bg"></div>
-            <div class="container">
-                <div class="row height align-items-center justify-content-center">
-                    <div class="col-lg-7">
-                        <div class="banner-content text-center">
-                            <h1>Favorites</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="fragments.html :: hero('Favorites',null)"></div>
 <div class="main-wrapper">
     <section class="service-area">
         <div class="container-fluid">
