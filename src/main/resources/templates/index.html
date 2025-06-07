@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="main-wrapper-first">
@@ -58,22 +59,23 @@
 
     <section class="service-area">
         <div class="container">
-            <div class="row">
-
-                <tr th:each="imageDir : ${imageList}">
-                    <div class="col-md-6">
-                        <a style="display:block"
-                           th:href="@{/selectedImage(
-                               imageDir=${imageDir})}">
-                            <div class="single-service">
-                                <img style="width: inherit; height: inherit;"
-                                     th:src="${imageDir}"/>
+            <form method="post" th:action="@{/saveFavorites}">
+                <button type="submit" class="btn btn-primary favorite-save-btn">Save selected</button>
+                <div class="row">
+                    <div th:each="imageDir : ${imageList}" class="col-lg-3 col-md-3 col-sm-6">
+                        <div class="image-wrapper">
+                            <a th:href="@{/selectedImage(imageDir=${imageDir})}">
+                                <div class="single-gallery-image" th:style="'background-image: url(' + ${imageDir} + ')'">
+                                </div>
+                            </a>
+                            <div class="favorite-checkbox">
+                                <input type="checkbox" th:id="${#strings.hashCode(imageDir)}" name="selectedImages" th:value="${imageDir}" />
+                                <label th:for="${#strings.hashCode(imageDir)}"></label>
                             </div>
-                        </a>
+                        </div>
                     </div>
-                </tr>
-
-            </div>
+                </div>
+            </form>
         </div>
     </section>
 
