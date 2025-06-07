@@ -197,14 +197,20 @@ public class NeuralBuilder implements Serializable {
 		}
 	}
 
-	public void removeRandomInputForRandomNeuron() {
-		int neuronId = new Random().nextInt(neuronList.size());
-		Set<Integer> inputIndexSet = inputIndexListByNeuronId.get(neuronId);
-		if (inputIndexSet.size() > 0) {
-			inputIndexSet.remove(new Random().nextInt(inputIndexSet.size()));
-			inputIndexListByNeuronId.put(neuronId, inputIndexSet);
-		}
-	}
+        public void removeRandomInputForRandomNeuron() {
+                int neuronId = new Random().nextInt(neuronList.size());
+                Set<Integer> inputIndexSet = inputIndexListByNeuronId.get(neuronId);
+                if (inputIndexSet.size() > 0) {
+                        // convert set to list to access elements by index
+                        List<Integer> inputs = new ArrayList<>(inputIndexSet);
+                        int removeIdx = new Random().nextInt(inputs.size());
+                        Integer value = inputs.get(removeIdx);
+                        // remove the chosen element from the original set
+                        inputIndexSet.remove(value);
+                        // store updated set back to the map
+                        inputIndexListByNeuronId.put(neuronId, inputIndexSet);
+                }
+        }
 
 	public void changeWeightsForRandomNeuron() {
 		int neuronId = new Random().nextInt(neuronList.size());
