@@ -44,3 +44,12 @@
 .navbar-custom .nav-link:hover {
     color: #f0ad4e !important;
 }
+
+header {
+    z-index: 1000;
+}
+
+.banner-content h1,
+.banner-content h4 {
+    color: #ffffff;
+}
