@@ -42,7 +42,7 @@ public class Main {
                 int builderCount = 16;
 		Scanner scanner = new Scanner(System.in);
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 6, 5);
+        NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 8, 7);
 
         BufferedImage bufferedImageHSB = new BufferedImage(GeneratorService.weightImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
         BufferedImage bufferedImageRGB = new BufferedImage(GeneratorService.weightImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
@@ -55,8 +55,11 @@ public class Main {
                                                 double d = calculateDistanceBetweenPoints(i, j, GeneratorService.heightImage / 2, GeneratorService.weightImage / 2);
                                                 double edge = Math.min(Math.min(i, GeneratorService.heightImage - i), Math.min(j, GeneratorService.weightImage - j));
                                                 double noise = Math.random();
+                                                double angle = Math.atan2(i - GeneratorService.heightImage / 2.0,
+                                                        j - GeneratorService.weightImage / 2.0);
+                                                double topLeft = calculateDistanceBetweenPoints(i, j, 0, 0);
 
-                                                neuralNetwork.feedForward(new double[]{i, j, d, edge, noise});
+                                                neuralNetwork.feedForward(new double[]{i, j, d, edge, noise, angle, topLeft});
 
 						Color colorHSB = neuralNetwork.getHsbColor(b);
 						Color colorRGB = neuralNetwork.getRgbColor(b);
