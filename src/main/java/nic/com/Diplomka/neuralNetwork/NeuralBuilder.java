@@ -39,36 +39,41 @@ public class NeuralBuilder implements Serializable {
                 return new NeuralBuilder(this);
         }
 
-	public NeuralBuilder(int neuronCount, int firstInputCount) {
-		neuronList = new ArrayList<>();
+        public NeuralBuilder(int neuronCount, int firstInputCount) {
+                neuronList = new ArrayList<>();
 
                 // index set including the initial network inputs
                 allIndexSet = new HashSet<>();
                 inputIndexListByNeuronId = new HashMap<>();
 
-		for (int i = 0; i < firstInputCount; i++) {
-			allIndexSet.add(-(i + 1));
-		}
+                for (int i = 0; i < firstInputCount; i++) {
+                        allIndexSet.add(-(i + 1));
+                }
 
-                // Build a random neural network structure
+                // Build a random feedforward network with random layer count
+                int layerCount = new Random().nextInt(Math.max(1, neuronCount)) + 1;
+                int remaining = neuronCount;
 
-		for (int i = 0; i < neuronCount; i++) {
-                        // pick random inputs for the neuron
-                        Set<Integer> inputIndexSet = getRandomInputIndexSetForNeuron(allIndexSet);
+                for (int l = 0; l < layerCount; l++) {
+                        int neuronsInLayer;
+                        if (l == layerCount - 1) {
+                                neuronsInLayer = remaining;
+                        } else {
+                                int maxForLayer = remaining - (layerCount - l - 1);
+                                neuronsInLayer = new Random().nextInt(maxForLayer) + 1;
+                        }
+                        remaining -= neuronsInLayer;
 
+                        for (int i = 0; i < neuronsInLayer; i++) {
+                                Set<Integer> inputIndexSet = getRandomInputIndexSetForNeuron(allIndexSet);
 
-                        // create a neuron with the chosen number of inputs
-                        /**
-                         * inputIndexSet.size() - number of inputs
-                         * neuronList.size() - neuron id
-                         */
-                        Neuron neuron = new Neuron(inputIndexSet.size(), neuronList.size());
-                        neuronList.add(neuron);
+                                Neuron neuron = new Neuron(inputIndexSet.size(), neuronList.size());
+                                neuronList.add(neuron);
 
-                        // store indices by neuron id
-                        inputIndexListByNeuronId.put(neuron.getId(), inputIndexSet);
-			allIndexSet.add(neuron.getId());
-		}
+                                inputIndexListByNeuronId.put(neuron.getId(), inputIndexSet);
+                                allIndexSet.add(neuron.getId());
+                        }
+                }
 	}
 
         private Set<Integer> getRandomInputIndexSetForNeuron(Set<Integer> indexSet) { // choose random inputs for a neuron
@@ -112,9 +117,9 @@ public class NeuralBuilder implements Serializable {
 
 	}
 
-	public void addNewRandomNeuron() {
-		Map<Integer, Set<Integer>> newInputIndexListByNeuronId = new HashMap<>();
-		int neuronId = new Random().nextInt(neuronList.size());
+        public void addNewRandomNeuron() {
+                Map<Integer, Set<Integer>> newInputIndexListByNeuronId = new HashMap<>();
+                int neuronId = new Random().nextInt(neuronList.size());
 
                 // determine where to insert the new neuron
                 // indices of inputs for the new neuron
@@ -155,11 +160,11 @@ public class NeuralBuilder implements Serializable {
 		for (int i = neuronId + 1; i < neuronList.size(); i++) {
 			Neuron neuronI = neuronList.get(i);
 			neuronI.setId(neuronI.getId() + 1);
-		}
-		inputIndexListByNeuronId = newInputIndexListByNeuronId;
+                }
+                inputIndexListByNeuronId = newInputIndexListByNeuronId;
 
                 // create output connections for the new neuron
-		addNewOutputsForNeuron(neuronId);
+                addNewOutputsForNeuron(neuronId);
 
 		calculateAllIndexSet();
 		if (returnIndexs != null) {
@@ -226,6 +231,62 @@ public class NeuralBuilder implements Serializable {
                         inputIndexSet.remove(value);
                         // store updated set back to the map
                         inputIndexListByNeuronId.put(neuronId, inputIndexSet);
+                }
+        }
+
+        private void addNeuronAtIndex(int neuronId) {
+                Map<Integer, Set<Integer>> newInputIndexListByNeuronId = new HashMap<>();
+                Set<Integer> inputIndexSet = new HashSet<>();
+
+                for (Integer key : inputIndexListByNeuronId.keySet()) {
+                        if (key < neuronId) {
+                                newInputIndexListByNeuronId.put(Integer.valueOf(key), new HashSet<>(inputIndexListByNeuronId.get(key)));
+                        }
+                }
+
+                for (Integer integer : allIndexSet) {
+                        if (integer < neuronId) {
+                                inputIndexSet.add(Integer.valueOf(integer));
+                        }
+                }
+
+                inputIndexSet = getRandomInputIndexSetForNeuron(inputIndexSet);
+
+                Neuron neuron = new Neuron(inputIndexSet.size(), neuronId);
+                neuronList.add(neuronId, neuron);
+
+                for (Integer key : inputIndexListByNeuronId.keySet()) {
+                        if (key >= neuronId) {
+                                if (key == neuronId) {
+                                        newInputIndexListByNeuronId.put(neuron.getId(), inputIndexSet);
+                                }
+                                indexMapIncrement(newInputIndexListByNeuronId, neuronId, key);
+                        }
+                }
+
+                for (int i = neuronId + 1; i < neuronList.size(); i++) {
+                        Neuron neuronI = neuronList.get(i);
+                        neuronI.setId(neuronI.getId() + 1);
+                }
+                inputIndexListByNeuronId = newInputIndexListByNeuronId;
+
+                addNewOutputsForNeuron(neuronId);
+
+                calculateAllIndexSet();
+                if (returnIndexs != null) {
+                        for (int i = 0; i < returnIndexs.length; i++) {
+                                if (returnIndexs[i] >= neuronId) {
+                                        returnIndexs[i] = returnIndexs[i] + 1;
+                                }
+                        }
+                }
+        }
+
+        public void addRandomLayer() {
+                int layerSize = new Random().nextInt(3) + 1;
+                int neuronId = new Random().nextInt(neuronList.size() + 1);
+                for (int i = 0; i < layerSize; i++) {
+                        addNeuronAtIndex(neuronId + i);
                 }
         }
 

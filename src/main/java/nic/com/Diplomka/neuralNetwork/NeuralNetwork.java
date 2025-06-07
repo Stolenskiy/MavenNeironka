@@ -129,11 +129,12 @@ public class NeuralNetwork implements Serializable {
              * changeWeightsForRandomNeuron - 3;
              * addNewOutputsForRandomNeuron - 4;
              * changeReturnRandomIndexs - 5;
-             * changeActivationFunctinForRandomNeuron - 6
+             * changeActivationFunctinForRandomNeuron - 6;
+             * addRandomLayer - 7
              */
-            int mutationCount = new Random().nextInt(7) + 1; // number of mutations
+            int mutationCount = new Random().nextInt(8) + 1; // number of mutations
             for (int mC = 0; mC < mutationCount; mC++) {
-                switch (new Random().nextInt(7)) {
+                switch (new Random().nextInt(8)) {
                     case 0:
                         cloneNB.addNewRandomNeuron();
                         changed += "0; ";
@@ -162,6 +163,10 @@ public class NeuralNetwork implements Serializable {
                         cloneNB.changeActivationFunctinForRandomNeuron();
                         changed += "6; ";
                         break;
+                    case 7:
+                        cloneNB.addRandomLayer();
+                        changed += "7; ";
+                        break;
                 }
             }
             changed = changed.replaceAll("0", "Added a new random neuron");
@@ -171,6 +176,7 @@ public class NeuralNetwork implements Serializable {
             changed = changed.replaceAll("4", "Added a random number of outputs for a random neuron");
             changed = changed.replaceAll("5", "Changed result indices");
             changed = changed.replaceAll("6", "Changed activation function for a neuron");
+            changed = changed.replaceAll("7", "Inserted a new random layer");
             changed = changed.replaceAll("; ", "\n");
             cloneNB.changed = changed;
 
