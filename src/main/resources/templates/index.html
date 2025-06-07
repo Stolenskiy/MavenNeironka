@@ -60,7 +60,7 @@
         <div class="container">
             <form method="post" th:action="@{/saveFavorites}">
                 <div class="row">
-                    <div th:each="imageDir : ${imageList}" class="col-md-6">
+                    <div th:each="imageDir : ${imageList}" class="col-md-3">
                         <a style="display:block"
                            th:href="@{/selectedImage(imageDir=${imageDir})}">
                             <div class="single-service">
