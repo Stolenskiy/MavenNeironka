@@ -4,7 +4,8 @@ function attachClickHandlers() {
       const imageDir = img.dataset.image;
       fetch('/api/selectedImage?imageDir=' + encodeURIComponent(imageDir))
         .then(res => res.json())
-        .then(updateImages);
+        .then(updateImages)
+        .catch(console.error);
     });
   });
 }
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       data.append('selectedImages', ch.value);
     });
     fetch('/saveFavorites', { method: 'POST', body: data })
-      .then(() => location.reload());
+      .then(() => location.reload())
+      .catch(console.error);
   });
 });
