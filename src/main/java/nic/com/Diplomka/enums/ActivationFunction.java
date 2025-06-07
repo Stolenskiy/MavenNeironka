@@ -82,9 +82,9 @@ public enum ActivationFunction implements IActivationFunction {
 			return procentOfRange(zero, handred, number);
 		}
 	},
-	SINNAX {
-		private static final double zero = -0.2;
-		private static final double handred = 1;
+        SINNAX {
+                private static final double zero = -0.2;
+                private static final double handred = 1;
 
 		@Override
 		public double function(double x) {
@@ -97,13 +97,32 @@ public enum ActivationFunction implements IActivationFunction {
 		}
 
 		@Override
-		public float procentOfRange(double number) {
-			return procentOfRange(zero, handred, number);
-		}
-	},
-	SIGN {
-		private static final double zero = -5;
-		private static final double handred = 5;
+                public float procentOfRange(double number) {
+                        return procentOfRange(zero, handred, number);
+                }
+        },
+        TANH {
+                private static final double zero = -1;
+                private static final double handred = 1;
+
+                @Override
+                public double function(double x) {
+                        return Math.tanh(x);
+                }
+
+                @Override
+                public float functionInProcent(double x) {
+                        return procentOfRange(zero, handred, function(x));
+                }
+
+                @Override
+                public float procentOfRange(double number) {
+                        return procentOfRange(zero, handred, number);
+                }
+        },
+        SIGN {
+                private static final double zero = -5;
+                private static final double handred = 5;
 
 		@Override
 		public double function(double x) {

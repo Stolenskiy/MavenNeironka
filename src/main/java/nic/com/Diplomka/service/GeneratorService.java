@@ -14,7 +14,7 @@ public class GeneratorService {
         public static final int heightImage;
         public static final int weightImage;
         public static int builderCount = 16;
-        public static NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
+        public static NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 6, 5);
 
         static {
                 Properties properties = new Properties();
@@ -48,13 +48,17 @@ public class GeneratorService {
                         dir.mkdirs();
                 }
 
-                double[] inputs = new double[3];
+                double[] inputs = new double[5];
                 for (int i = 0; i < heightImage; i++) {
                         for (int j = 0; j < weightImage; j++) {
                                 double d = calculateDistanceBetweenPoints(i, j, heightImage / 2.0, weightImage / 2.0);
+                                double edge = Math.min(Math.min(i, heightImage - i), Math.min(j, weightImage - j));
+                                double noise = Math.random();
                                 inputs[0] = i;
                                 inputs[1] = j;
                                 inputs[2] = d;
+                                inputs[3] = edge;
+                                inputs[4] = noise;
                                 neuralNetwork.feedForward(inputs);
                                 for (int b = 0; b < builderCount; b++) {
                                         Color colorHSB = neuralNetwork.getHsbColor(b);
