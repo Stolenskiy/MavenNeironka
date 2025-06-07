@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="main-wrapper-first">
@@ -57,14 +58,14 @@
 <div class="main-wrapper">
 
     <section class="service-area">
-        <div class="container">
+        <div class="container-fluid">
             <form method="post" th:action="@{/saveFavorites}">
                 <div class="row">
-                    <div th:each="imageDir : ${imageList}" class="col-md-3">
+                    <div th:each="imageDir : ${imageList}" class="col-md-3 image-col">
                         <a style="display:block"
                            th:href="@{/selectedImage(imageDir=${imageDir})}">
                             <div class="single-service">
-                                <img style="width: inherit; height: inherit;"
+                                <img class="img-fluid gallery-img"
                                      th:src="${imageDir}"/>
                             </div>
                         </a>
