@@ -21,34 +21,41 @@ public class GeneratorService {
 	}
 
         public static void generateImages() {
-                BufferedImage bufferedImageHSB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
-                BufferedImage bufferedImageRGB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+                BufferedImage[] bufferedImagesHSB = new BufferedImage[builderCount];
+                BufferedImage[] bufferedImagesRGB = new BufferedImage[builderCount];
+
+                for (int b = 0; b < builderCount; b++) {
+                        bufferedImagesHSB[b] = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+                        bufferedImagesRGB[b] = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+                }
 
                 File dir = new File("src/main/resources/image_db");
                 if (!dir.exists()) {
                         dir.mkdirs();
                 }
 
-		for (int b = 0; b < builderCount; b++) {
+                double[] inputs = new double[3];
+                for (int i = 0; i < heightImage; i++) {
+                        for (int j = 0; j < weightImage; j++) {
+                                double d = calculateDistanceBetweenPoints(i, j, heightImage / 2.0, weightImage / 2.0);
+                                inputs[0] = i;
+                                inputs[1] = j;
+                                inputs[2] = d;
+                                neuralNetwork.feedForward(inputs);
+                                for (int b = 0; b < builderCount; b++) {
+                                        Color colorHSB = neuralNetwork.getHsbColor(b);
+                                        Color colorRGB = neuralNetwork.getRgbColor(b);
+                                        bufferedImagesHSB[b].setRGB(j, i, colorHSB.getRGB());
+                                        bufferedImagesRGB[b].setRGB(j, i, colorRGB.getRGB());
+                                }
+                        }
+                }
 
-			for (int i = 0; i < heightImage; i++) {
-				for (int j = 0; j < weightImage; j++) {
-
-					double d = calculateDistanceBetweenPoints(i, j, heightImage / 2, weightImage / 2);
-
-					neuralNetwork.feedForward(new double[]{i, j, d});
-
-					Color colorHSB = neuralNetwork.getHsbColor(b);
-					Color colorRGB = neuralNetwork.getRgbColor(b);
-
-					bufferedImageHSB.setRGB(j, i, colorHSB.getRGB());
-					bufferedImageRGB.setRGB(j, i, colorRGB.getRGB());
-				}
-			}
-                        saveImage("src/main/resources/image_db/" + b + "_hsb.png", bufferedImageHSB, "png");
-                        saveImage("src/main/resources/image_db/" + b + "_rgb.png", bufferedImageRGB, "png");
-		}
-	}
+                for (int b = 0; b < builderCount; b++) {
+                        saveImage("src/main/resources/image_db/" + b + "_hsb.png", bufferedImagesHSB[b], "png");
+                        saveImage("src/main/resources/image_db/" + b + "_rgb.png", bufferedImagesRGB[b], "png");
+                }
+        }
 
 	private static void saveImage(String imgDir, BufferedImage image, String format){
 		File output = new File(imgDir);
