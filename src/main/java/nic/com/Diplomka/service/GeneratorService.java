@@ -20,9 +20,14 @@ public class GeneratorService {
 		return Math.hypot(ac, cb);
 	}
 
-	public static void generateImages() {
-		BufferedImage bufferedImageHSB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
-		BufferedImage bufferedImageRGB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+        public static void generateImages() {
+                BufferedImage bufferedImageHSB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+                BufferedImage bufferedImageRGB = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+
+                File dir = new File("src/main/resources/image_db");
+                if (!dir.exists()) {
+                        dir.mkdirs();
+                }
 
 		for (int b = 0; b < builderCount; b++) {
 
@@ -40,8 +45,8 @@ public class GeneratorService {
 					bufferedImageRGB.setRGB(j, i, colorRGB.getRGB());
 				}
 			}
-			saveImage("src\\\\main\\\\resources\\\\image_db\\\\" + b + "_hsb.png", bufferedImageHSB, "png");
-			saveImage("src\\\\main\\\\resources\\\\image_db\\\\" + b + "_rgb.png", bufferedImageRGB, "png");
+                        saveImage("src/main/resources/image_db/" + b + "_hsb.png", bufferedImageHSB, "png");
+                        saveImage("src/main/resources/image_db/" + b + "_rgb.png", bufferedImageRGB, "png");
 		}
 	}
 
