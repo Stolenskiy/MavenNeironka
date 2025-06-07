@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 import java.util.ArrayList;
@@ -61,8 +62,19 @@ public class IndexViewController {
                     srcPath = Paths.get("image").resolve(Paths.get(img).getFileName());
                 }
                 if (Files.exists(srcPath)) {
+                    String timestamp = LocalDateTime.now()
+                            .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                    String fileName = srcPath.getFileName().toString();
+                    int dotIndex = fileName.lastIndexOf('.');
+                    String newName;
+                    if (dotIndex != -1) {
+                        newName = fileName.substring(0, dotIndex) + "_" + timestamp + fileName.substring(dotIndex);
+                    } else {
+                        newName = fileName + "_" + timestamp;
+                    }
+                    Path dest = favDir.resolve(newName);
                     try {
-                        Files.copy(srcPath, favDir.resolve(srcPath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                        Files.copy(srcPath, dest);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
