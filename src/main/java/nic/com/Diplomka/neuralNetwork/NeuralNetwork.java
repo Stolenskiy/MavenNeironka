@@ -72,21 +72,6 @@ public class NeuralNetwork implements Serializable {
         return deserializebleObj;
     }
 
-    private static <T extends Serializable> T cloneObject(T obj) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
-                oos.writeObject(obj);
-            }
-            try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()))) {
-                @SuppressWarnings("unchecked")
-                T clone = (T) ois.readObject();
-                return clone;
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public Color getRgbColor(int index) {
         int[] returnIndexs = neuralBuilders[index].getReturnIndexs();
@@ -135,7 +120,7 @@ public class NeuralNetwork implements Serializable {
         neuralBuilders[0] = base;
         for (int i = 1; i < neuralBuilders.length; i++) {
             String changed = "";
-            NeuralBuilder cloneNB = cloneObject(base);
+            NeuralBuilder cloneNB = base.copy();
             // потрібно трохи змінити нейронну мережу
             /** Ф-ції, які рандомом змінюють нейронну мережу
              * addNewRandomNeuron - 0;
