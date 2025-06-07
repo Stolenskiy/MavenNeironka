@@ -1,39 +1,32 @@
 import nic.com.Diplomka.controller.IndexViewController;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SaveFavoritesUniqueNamesTest {
+public class SaveFavoritesNetworkFileTest {
     @Test
-    void testUniqueNamesWhenSavingFavorites() throws IOException {
+    void testNetworkFileCreated() throws IOException {
         IndexViewController controller = new IndexViewController();
         Path favDir = Paths.get("favorite_images");
         if (Files.exists(favDir)) {
             Files.walk(favDir)
                     .filter(Files::isRegularFile)
-                    .forEach(p -> {
-                        try { Files.delete(p); } catch (IOException ignored) {}
-                    });
+                    .forEach(p -> { try { Files.delete(p); } catch (IOException ignored) {} });
         } else {
             Files.createDirectories(favDir);
         }
-
         String imgPath = "image/0_hsb.png";
         controller.saveFavorites(List.of(imgPath));
-        controller.saveFavorites(List.of(imgPath));
-
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(favDir, "*.png")) {
-            int fileCount = 0;
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(favDir, "*.ser")) {
+            int count = 0;
             for (Path p : stream) {
-                fileCount++;
+                count++;
                 String name = p.getFileName().toString();
-                assertTrue(name.startsWith("0_hsb_") && name.endsWith(".png"));
+                assertTrue(name.startsWith("0_hsb_") && name.endsWith(".ser"));
             }
-            assertEquals(2, fileCount);
+            assertEquals(1, count);
         }
     }
 }

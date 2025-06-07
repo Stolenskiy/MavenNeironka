@@ -21,6 +21,14 @@ public class NeuralNetwork implements Serializable {
                 evolute(0);
         }
 
+        public NeuralBuilder getNeuralBuilder(int index) {
+                return neuralBuilders[index];
+        }
+
+        public void setNeuralBuilder(int index, NeuralBuilder builder) {
+                neuralBuilders[index] = builder;
+        }
+
     public static void serializebleObject(Object obj, String fileName) {
         ObjectOutputStream objectOutputStream = null;
         try {

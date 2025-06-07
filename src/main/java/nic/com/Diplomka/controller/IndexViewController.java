@@ -1,6 +1,8 @@
 package nic.com.Diplomka.controller;
 
 import nic.com.Diplomka.service.GeneratorService;
+import nic.com.Diplomka.neuralNetwork.NeuralBuilder;
+import nic.com.Diplomka.neuralNetwork.NeuralNetwork;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,6 +77,10 @@ public class IndexViewController {
                     Path dest = favDir.resolve(newName);
                     try {
                         Files.copy(srcPath, dest);
+                        String builderName = newName.replaceAll("\\.png$", ".ser");
+                        int idx = fileName.replaceAll("\\D", "").isEmpty() ? 0 : Integer.parseInt(fileName.replaceAll("\\D", ""));
+                        NeuralBuilder builder = GeneratorService.neuralNetwork.getNeuralBuilder(idx);
+                        NeuralNetwork.serializebleObject(builder, favDir.resolve(builderName).toString());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -101,6 +107,27 @@ public class IndexViewController {
         return "favorites.html";
     }
 
+    @GetMapping("/favoriteSelectedImage")
+    public ModelAndView favoriteSelectedImage(
+            @RequestParam() String imageDir,
+            ModelAndView modelAndView
+    ) {
+        Path neuralPath = Paths.get("src/main/resources").resolve(imageDir.replace(".png", ".ser"));
+        if (!Files.exists(neuralPath)) {
+            neuralPath = Paths.get(imageDir).resolveSibling(neuralPath.getFileName());
+        }
+        if (Files.exists(neuralPath)) {
+            NeuralBuilder builder = (NeuralBuilder) NeuralNetwork.deserializebleObject(neuralPath.toString());
+            if (builder != null) {
+                GeneratorService.neuralNetwork.setNeuralBuilder(0, builder);
+                GeneratorService.neuralNetwork.evolute(0);
+                GeneratorService.generateImages();
+            }
+        }
+        modelAndView.setViewName("redirect:/");
+        return modelAndView;
+    }
+
     private List<String> getFavoriteImageList() {
         Path dir = Paths.get("src/main/resources/favorite_images");
         if (!Files.exists(dir)) {
@@ -108,7 +135,7 @@ public class IndexViewController {
         }
         try (Stream<Path> stream = Files.list(dir)) {
             return stream
-                    .filter(Files::isRegularFile)
+                    .filter(p -> Files.isRegularFile(p) && p.getFileName().toString().endsWith(".png"))
                     .map(p -> "favorite_images/" + p.getFileName().toString())
                     .collect(Collectors.toList());
         } catch (IOException e) {
