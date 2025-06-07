@@ -3,24 +3,37 @@ package nic.com.Diplomka.neuralNetwork;
 import nic.com.Diplomka.enums.ActivationFunction;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Neuron implements Serializable {
-	private double inputs[];
-	private double weights[];
-	private double output;
-	private int id;
+        private double[] inputs;
+        private double[] weights;
+        private double output;
+        private int id;
 
-	private ActivationFunction activationFunction;
+        private ActivationFunction activationFunction;
 
 	public Neuron() {
 	}
 
-	public Neuron(double[] inputs, double[] weights, ActivationFunction activationFunction) {
-		this.inputs = inputs;
-		this.weights = weights;
-		this.activationFunction = activationFunction;
-	}
+        public Neuron(double[] inputs, double[] weights, ActivationFunction activationFunction) {
+                this.inputs = inputs;
+                this.weights = weights;
+                this.activationFunction = activationFunction;
+        }
+
+        public Neuron(Neuron other) {
+                this.inputs = other.inputs != null ? Arrays.copyOf(other.inputs, other.inputs.length) : null;
+                this.weights = other.weights != null ? Arrays.copyOf(other.weights, other.weights.length) : null;
+                this.output = other.output;
+                this.id = other.id;
+                this.activationFunction = other.activationFunction;
+        }
+
+        public Neuron copy() {
+                return new Neuron(this);
+        }
 
 	public Neuron(double[] inputs) {
 		this.inputs = inputs;

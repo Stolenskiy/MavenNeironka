@@ -18,8 +18,26 @@ public class NeuralBuilder implements Serializable {
 	private int[] returnIndexs;
 
 
-	public NeuralBuilder() {
-	}
+        public NeuralBuilder() {
+        }
+
+        public NeuralBuilder(NeuralBuilder other) {
+                this.changed = other.changed;
+                this.neuronList = new ArrayList<>();
+                for (Neuron n : other.neuronList) {
+                        this.neuronList.add(n.copy());
+                }
+                this.inputIndexListByNeuronId = new HashMap<>();
+                for (Map.Entry<Integer, Set<Integer>> e : other.inputIndexListByNeuronId.entrySet()) {
+                        this.inputIndexListByNeuronId.put(e.getKey(), new HashSet<>(e.getValue()));
+                }
+                this.allIndexSet = new HashSet<>(other.allIndexSet);
+                this.returnIndexs = other.returnIndexs != null ? Arrays.copyOf(other.returnIndexs, other.returnIndexs.length) : null;
+        }
+
+        public NeuralBuilder copy() {
+                return new NeuralBuilder(this);
+        }
 
 	public NeuralBuilder(int neuronCount, int firstInputCount) {
 		neuronList = new ArrayList<>();
