@@ -2216,13 +2216,12 @@ body {
 }
 
 .service-area .single-service {
-  height: 400px;
-  width: 450px;
+  height: 250px;
+  width: 100%;
   color: #fff;
   position: relative;
   border-radius: 3px;
   overflow: hidden;
-  margin-left: 15px;
   margin-top: 30px;
   background-repeat: no-repeat !important;
   background-size: cover !important;
