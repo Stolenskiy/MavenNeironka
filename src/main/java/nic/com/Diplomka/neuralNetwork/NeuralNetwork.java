@@ -4,17 +4,22 @@ import java.awt.*;
 import java.io.*;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.IntStream;
 
 public class NeuralNetwork implements Serializable {
-    private NeuralBuilder[] neuralBuilders;
-    private Color rgbColor;
-    private Color hsbColor;
+        private NeuralBuilder[] neuralBuilders;
+        private Color rgbColor;
+        private Color hsbColor;
+        private ForkJoinPool forkJoinPool;
 
-    public NeuralNetwork(int builderCount, int neuronCount, int firstInputCount) {
-        neuralBuilders = new NeuralBuilder[builderCount];
-        neuralBuilders[0] = new NeuralBuilder(neuronCount, firstInputCount);
-        evolute(0);
-    }
+        public NeuralNetwork(int builderCount, int neuronCount, int firstInputCount) {
+                neuralBuilders = new NeuralBuilder[builderCount];
+                neuralBuilders[0] = new NeuralBuilder(neuronCount, firstInputCount);
+                forkJoinPool = new ForkJoinPool(builderCount);
+                evolute(0);
+        }
 
     public static void serializebleObject(Object obj, String fileName) {
         ObjectOutputStream objectOutputStream = null;
@@ -85,11 +90,17 @@ public class NeuralNetwork implements Serializable {
         return hsbColor;
     }
 
-    public void feedForward(double[] inputs) {
-        for (int i = 0; i < neuralBuilders.length; i++) {
-            neuralBuilders[i].feedForward(inputs);
+        public void feedForward(double[] inputs) {
+                try {
+                        forkJoinPool.submit(() ->
+                                IntStream.range(0, neuralBuilders.length).parallel()
+                                        .forEach(i -> neuralBuilders[i].feedForward(inputs))
+                        ).get();
+                } catch (InterruptedException | ExecutionException e) {
+                        Thread.currentThread().interrupt();
+                        e.printStackTrace();
+                }
         }
-    }
 
     public NeuralBuilder[] evolute(int index) {
         if (neuralBuilders[index].changed != null) {
