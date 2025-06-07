@@ -65,9 +65,9 @@ public class Neuron implements Serializable {
 		return output;
 	}
 
-	public float getOutputInProcent() {
-		return activationFunction.procentOfRange(getOutput());
-	}
+        public float getOutputInPercent() {
+                return activationFunction.percentOfRange(getOutput());
+        }
 
 	public double getOutput() {
 		return output;

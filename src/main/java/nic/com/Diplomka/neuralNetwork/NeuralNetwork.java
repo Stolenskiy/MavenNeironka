@@ -78,9 +78,9 @@ public class NeuralNetwork implements Serializable {
         List<Neuron> neuronList = neuralBuilders[index].getNeuronList();
         try {
             rgbColor = new Color(
-                    neuronList.get(returnIndexs[0]).getOutputInProcent(),
-                    neuronList.get(returnIndexs[1]).getOutputInProcent(),
-                    neuronList.get(returnIndexs[2]).getOutputInProcent()
+                    neuronList.get(returnIndexs[0]).getOutputInPercent(),
+                    neuronList.get(returnIndexs[1]).getOutputInPercent(),
+                    neuronList.get(returnIndexs[2]).getOutputInPercent()
             );
         } catch (Exception ex) {
             neuronList.get(0);
@@ -92,9 +92,9 @@ public class NeuralNetwork implements Serializable {
         int[] returnIndexs = neuralBuilders[index].getReturnIndexs();
         List<Neuron> neuronList = neuralBuilders[index].getNeuronList();
         hsbColor = Color.getHSBColor(
-                neuronList.get(returnIndexs[0]).getOutputInProcent(),
-                neuronList.get(returnIndexs[1]).getOutputInProcent(),
-                neuronList.get(returnIndexs[2]).getOutputInProcent()
+                neuronList.get(returnIndexs[0]).getOutputInPercent(),
+                neuronList.get(returnIndexs[1]).getOutputInPercent(),
+                neuronList.get(returnIndexs[2]).getOutputInPercent()
         );
         return hsbColor;
     }
@@ -121,8 +121,8 @@ public class NeuralNetwork implements Serializable {
         for (int i = 1; i < neuralBuilders.length; i++) {
             String changed = "";
             NeuralBuilder cloneNB = base.copy();
-            // потрібно трохи змінити нейронну мережу
-            /** Ф-ції, які рандомом змінюють нейронну мережу
+            // slightly mutate the neural network
+            /** Functions that randomly mutate the network
              * addNewRandomNeuron - 0;
              * removeRandomNeuron - 1;
              * removeRandomInputForRandomNeuron - 2;
@@ -131,7 +131,7 @@ public class NeuralNetwork implements Serializable {
              * changeReturnRandomIndexs - 5;
              * changeActivationFunctinForRandomNeuron - 6
              */
-            int mutationCount = new Random().nextInt(7) + 1;// к-ть мутацій
+            int mutationCount = new Random().nextInt(7) + 1; // number of mutations
             for (int mC = 0; mC < mutationCount; mC++) {
                 switch (new Random().nextInt(7)) {
                     case 0:
@@ -164,13 +164,13 @@ public class NeuralNetwork implements Serializable {
                         break;
                 }
             }
-            changed = changed.replaceAll("0", "Додано новий рандомний нейрон");
-            changed = changed.replaceAll("1", "Видалено рандомний нейрон");
-            changed = changed.replaceAll("2", "Видалено рандомний вхід для рандомного нейрона");
-            changed = changed.replaceAll("3", "Змінено ваги для рандомного нейрона");
-            changed = changed.replaceAll("4", "Додано рандомну к-ть виходів для рандомного нейрона");
-            changed = changed.replaceAll("5", "Змінено результуючі індекси");
-            changed = changed.replaceAll("6", "Змінено ф-цію активації для нейрона");
+            changed = changed.replaceAll("0", "Added a new random neuron");
+            changed = changed.replaceAll("1", "Removed a random neuron");
+            changed = changed.replaceAll("2", "Removed a random input for a random neuron");
+            changed = changed.replaceAll("3", "Changed weights for a random neuron");
+            changed = changed.replaceAll("4", "Added a random number of outputs for a random neuron");
+            changed = changed.replaceAll("5", "Changed result indices");
+            changed = changed.replaceAll("6", "Changed activation function for a neuron");
             changed = changed.replaceAll("; ", "\n");
             cloneNB.changed = changed;
 

@@ -8,18 +8,19 @@ public enum ActivationFunction implements IActivationFunction {
 		private static final double hundred = 1;
 
 		@Override
-		public double function(double x) { // значення [0;1]
+                // value range [0;1]
+                public double function(double x) {
 			return 1 / (1 + Math.exp(-x));
 		}
 
 		@Override
-		public float functionInProcent(double x) {
-			return procentOfRange(zero, hundred, function(x));
+		public float functionInPercent(double x) {
+			return percentOfRange(zero, hundred, function(x));
 		}
 
 		@Override
-		public float procentOfRange(double number) {
-			return procentOfRange(zero, hundred, number);
+		public float percentOfRange(double number) {
+			return percentOfRange(zero, hundred, number);
 		}
 	},
 	SINUSOID {
@@ -27,18 +28,19 @@ public enum ActivationFunction implements IActivationFunction {
 		private static final double hundred = 1;
 
 		@Override
-		public double function(double x) { // значення [-1;1]
+                // value range [-1;1]
+                public double function(double x) {
 			return Math.sin(x);
 		}
 
 		@Override
-		public float functionInProcent(double x) {
-			return procentOfRange(zero, hundred, function(x));
+		public float functionInPercent(double x) {
+			return percentOfRange(zero, hundred, function(x));
 		}
 
 		@Override
-		public float procentOfRange(double number) {
-			return procentOfRange(zero, hundred, number);
+		public float percentOfRange(double number) {
+			return percentOfRange(zero, hundred, number);
 		}
 	},
 	KRIVOID {
@@ -51,13 +53,13 @@ public enum ActivationFunction implements IActivationFunction {
 		}
 
 		@Override
-		public float functionInProcent(double x) {
-			return procentOfRange(zero, hundred, function(x));
+		public float functionInPercent(double x) {
+			return percentOfRange(zero, hundred, function(x));
 		}
 
 		@Override
-		public float procentOfRange(double number) {
-			return procentOfRange(zero, hundred, number);
+		public float percentOfRange(double number) {
+			return percentOfRange(zero, hundred, number);
 		}
 	},
 	GAUSIAN {
@@ -73,13 +75,13 @@ public enum ActivationFunction implements IActivationFunction {
 		}
 
 		@Override
-		public float functionInProcent(double x) {
-			return procentOfRange(function(x));
+		public float functionInPercent(double x) {
+			return percentOfRange(function(x));
 		}
 
 		@Override
-		public float procentOfRange(double number) {
-			return procentOfRange(zero, hundred, number);
+		public float percentOfRange(double number) {
+			return percentOfRange(zero, hundred, number);
 		}
 	},
         SINNAX {
@@ -92,13 +94,13 @@ public enum ActivationFunction implements IActivationFunction {
 		}
 
 		@Override
-		public float functionInProcent(double x) {
-			return procentOfRange(function(x));
+		public float functionInPercent(double x) {
+			return percentOfRange(function(x));
 		}
 
 		@Override
-                public float procentOfRange(double number) {
-                        return procentOfRange(zero, hundred, number);
+                public float percentOfRange(double number) {
+                        return percentOfRange(zero, hundred, number);
                 }
         },
         TANH {
@@ -111,13 +113,13 @@ public enum ActivationFunction implements IActivationFunction {
                 }
 
                 @Override
-                public float functionInProcent(double x) {
-                        return procentOfRange(zero, hundred, function(x));
+                public float functionInPercent(double x) {
+                        return percentOfRange(zero, hundred, function(x));
                 }
 
                 @Override
-                public float procentOfRange(double number) {
-                        return procentOfRange(zero, hundred, number);
+                public float percentOfRange(double number) {
+                        return percentOfRange(zero, hundred, number);
                 }
         },
         SIGN {
@@ -130,17 +132,17 @@ public enum ActivationFunction implements IActivationFunction {
 		}
 
 		@Override
-		public float functionInProcent(double x) {
-			return procentOfRange(function(x));
+		public float functionInPercent(double x) {
+			return percentOfRange(function(x));
 		}
 
 		@Override
-		public float procentOfRange(double number) {
-			return procentOfRange(zero, hundred, number);
+		public float percentOfRange(double number) {
+			return percentOfRange(zero, hundred, number);
 		}
 	};
 
-	public static float procentOfRange(double zero, double hundred, double number) {
+	public static float percentOfRange(double zero, double hundred, double number) {
 		double rangeCount = hundred - zero;
 		double x = number - zero;
 		return (float) (x / rangeCount);
