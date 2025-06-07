@@ -10,14 +10,14 @@ public class ActivationFunctionTest {
     }
 
     @Test
-    void testSinusoidFunctionInProcent() {
-        float percent = ActivationFunction.SINUSOID.functionInProcent(0);
+    void testSinusoidFunctionInPercent() {
+        float percent = ActivationFunction.SINUSOID.functionInPercent(0);
         assertEquals(0.5f, percent, 1e-6);
     }
 
     @Test
-    void testProcentOfRange() {
-        float p = ActivationFunction.procentOfRange(0, 10, 5);
+    void testPercentOfRange() {
+        float p = ActivationFunction.percentOfRange(0, 10, 5);
         assertEquals(0.5f, p, 1e-6);
     }
 

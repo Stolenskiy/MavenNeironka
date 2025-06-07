@@ -12,6 +12,6 @@ public class NeuronTest {
         double output = neuron.calculateOutput();
         assertEquals(1 / (1 + Math.exp(-1.5)), output, 1e-6);
         assertEquals(output, neuron.getOutput(), 1e-9);
-        assertEquals(output, neuron.getOutputInProcent(), 1e-6);
+        assertEquals(output, neuron.getOutputInPercent(), 1e-6);
     }
 }

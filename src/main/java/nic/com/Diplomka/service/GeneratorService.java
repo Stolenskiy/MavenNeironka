@@ -12,9 +12,9 @@ import java.util.Properties;
 public class GeneratorService {
         public static final String DEFAULT_SIZE = "250";
         public static final int heightImage;
-        public static final int weightImage;
+        public static final int widthImage;
         public static int builderCount = 16;
-        public static NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
+        public static NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 8, 7);
 
         static {
                 Properties properties = new Properties();
@@ -25,7 +25,7 @@ public class GeneratorService {
                 } catch (IOException ignored) {
                 }
                 heightImage = Integer.parseInt(properties.getProperty("app.image.height", DEFAULT_SIZE));
-                weightImage = Integer.parseInt(properties.getProperty("app.image.width", DEFAULT_SIZE));
+                widthImage = Integer.parseInt(properties.getProperty("app.image.width", DEFAULT_SIZE));
         }
 
 	public static double calculateDistanceBetweenPoints(double x1, double y1, double x2, double y2) {
@@ -39,8 +39,8 @@ public class GeneratorService {
                 BufferedImage[] bufferedImagesRGB = new BufferedImage[builderCount];
 
                 for (int b = 0; b < builderCount; b++) {
-                        bufferedImagesHSB[b] = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
-                        bufferedImagesRGB[b] = new BufferedImage(weightImage, heightImage, BufferedImage.TYPE_INT_RGB);
+                        bufferedImagesHSB[b] = new BufferedImage(widthImage, heightImage, BufferedImage.TYPE_INT_RGB);
+                        bufferedImagesRGB[b] = new BufferedImage(widthImage, heightImage, BufferedImage.TYPE_INT_RGB);
                 }
 
                 File dir = new File("src/main/resources/image_db");
@@ -48,13 +48,21 @@ public class GeneratorService {
                         dir.mkdirs();
                 }
 
-                double[] inputs = new double[3];
+                double[] inputs = new double[7];
                 for (int i = 0; i < heightImage; i++) {
-                        for (int j = 0; j < weightImage; j++) {
-                                double d = calculateDistanceBetweenPoints(i, j, heightImage / 2.0, weightImage / 2.0);
+                        for (int j = 0; j < widthImage; j++) {
+                                double d = calculateDistanceBetweenPoints(i, j, heightImage / 2.0, widthImage / 2.0);
+                                double edge = Math.min(Math.min(i, heightImage - i), Math.min(j, widthImage - j));
+                                double noise = Math.random();
+                                double angle = Math.atan2(i - heightImage / 2.0, j - widthImage / 2.0);
+                                double topLeft = calculateDistanceBetweenPoints(i, j, 0, 0);
                                 inputs[0] = i;
                                 inputs[1] = j;
                                 inputs[2] = d;
+                                inputs[3] = edge;
+                                inputs[4] = noise;
+                                inputs[5] = angle;
+                                inputs[6] = topLeft;
                                 neuralNetwork.feedForward(inputs);
                                 for (int b = 0; b < builderCount; b++) {
                                         Color colorHSB = neuralNetwork.getHsbColor(b);

@@ -42,19 +42,24 @@ public class Main {
                 int builderCount = 16;
 		Scanner scanner = new Scanner(System.in);
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 3, 3);
+        NeuralNetwork neuralNetwork = new NeuralNetwork(builderCount, 8, 7);
 
-        BufferedImage bufferedImageHSB = new BufferedImage(GeneratorService.weightImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
-        BufferedImage bufferedImageRGB = new BufferedImage(GeneratorService.weightImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bufferedImageHSB = new BufferedImage(GeneratorService.widthImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bufferedImageRGB = new BufferedImage(GeneratorService.widthImage, GeneratorService.heightImage, BufferedImage.TYPE_INT_RGB);
 		while (true) {
 			for (int b = 0; b < builderCount; b++) {
 
                                 for (int i = 0; i < GeneratorService.heightImage; i++) {
-                                        for (int j = 0; j < GeneratorService.weightImage; j++) {
+                                        for (int j = 0; j < GeneratorService.widthImage; j++) {
 
-                                                double d = calculateDistanceBetweenPoints(i, j, GeneratorService.heightImage / 2, GeneratorService.weightImage / 2);
+                                                double d = calculateDistanceBetweenPoints(i, j, GeneratorService.heightImage / 2, GeneratorService.widthImage / 2);
+                                                double edge = Math.min(Math.min(i, GeneratorService.heightImage - i), Math.min(j, GeneratorService.widthImage - j));
+                                                double noise = Math.random();
+                                                double angle = Math.atan2(i - GeneratorService.heightImage / 2.0,
+                                                        j - GeneratorService.widthImage / 2.0);
+                                                double topLeft = calculateDistanceBetweenPoints(i, j, 0, 0);
 
-						neuralNetwork.feedForward(new double[]{i, j, d});
+                                                neuralNetwork.feedForward(new double[]{i, j, d, edge, noise, angle, topLeft});
 
 						Color colorHSB = neuralNetwork.getHsbColor(b);
 						Color colorRGB = neuralNetwork.getRgbColor(b);
@@ -71,7 +76,7 @@ public class Main {
 			int index = 5;
 			for (; ; ) {
 				try {
-					System.out.print("Ввід: ");
+					System.out.print("Input: ");
 
 					String line = scanner.nextLine();
 					index = Integer.valueOf(line);
