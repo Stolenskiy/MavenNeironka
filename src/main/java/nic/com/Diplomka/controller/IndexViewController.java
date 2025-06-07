@@ -17,6 +17,8 @@ import java.nio.file.StandardCopyOption;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class IndexViewController {
@@ -42,7 +44,7 @@ public class IndexViewController {
             @RequestParam(value = "selectedImages", required = false) List<String> selectedImages
     ) {
         if (selectedImages != null && !selectedImages.isEmpty()) {
-            Path favDir = Paths.get("favorite_images");
+            Path favDir = Paths.get("src/main/resources/favorite_images");
             if (!Files.exists(favDir)) {
                 try {
                     Files.createDirectories(favDir);
@@ -79,6 +81,28 @@ public class IndexViewController {
         }
 
         return imageList;
+    }
+
+    @GetMapping("/favorites")
+    public String favoritesPage(Model model) {
+        model.addAttribute("favoriteImages", getFavoriteImageList());
+        return "favorites.html";
+    }
+
+    private List<String> getFavoriteImageList() {
+        Path dir = Paths.get("src/main/resources/favorite_images");
+        if (!Files.exists(dir)) {
+            return new ArrayList<>();
+        }
+        try (Stream<Path> stream = Files.list(dir)) {
+            return stream
+                    .filter(Files::isRegularFile)
+                    .map(p -> "favorite_images/" + p.getFileName().toString())
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 

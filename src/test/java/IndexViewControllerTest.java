@@ -16,4 +16,14 @@ public class IndexViewControllerTest {
         assertNotNull(imageList);
         assertEquals(GeneratorService.builderCount * 2, imageList.size());
     }
+
+    @Test
+    void testFavoritesListEmpty() {
+        IndexViewController controller = new IndexViewController();
+        Model model = new ExtendedModelMap();
+        controller.favoritesPage(model);
+        List<String> favoriteImages = (List<String>) model.getAttribute("favoriteImages");
+        assertNotNull(favoriteImages);
+        assertEquals(0, favoriteImages.size());
+    }
 }
