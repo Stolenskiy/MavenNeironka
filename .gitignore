@@ -2,3 +2,5 @@
 .idea
 .iml
 .class
+# Maven build output
+target/
