@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -35,6 +36,15 @@ public class IndexViewController {
         GeneratorService.generateImages();
         modelAndView.setViewName("redirect:/");
         return modelAndView;
+    }
+
+    @GetMapping("/api/selectedImage")
+    @ResponseBody
+    public List<String> selectedImageApi(@RequestParam String imageDir) {
+        int index = Integer.parseInt(imageDir.replaceAll("\\D", ""));
+        GeneratorService.neuralNetwork.evolute(index);
+        GeneratorService.generateImages();
+        return getImageList();
     }
 
     @PostMapping("/saveFavorites")

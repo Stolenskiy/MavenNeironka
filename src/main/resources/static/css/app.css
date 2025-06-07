@@ -1,0 +1,17 @@
+body {
+  background: linear-gradient(135deg, #4b0082, #8a2be2);
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.image-card img:hover {
+  transform: scale(1.05);
+}
