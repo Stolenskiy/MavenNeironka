@@ -8,9 +8,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div th:each="img : ${favoriteImages}" class="col-md-3 image-col">
-                    <div class="single-service">
-                        <img class="img-fluid gallery-img" th:src="${img}"/>
-                    </div>
+                    <a th:href="@{/favoriteSelectedImage(imageDir=${img})}" style="display:block">
+                        <div class="single-service">
+                            <img class="img-fluid gallery-img" th:src="${img}"/>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>

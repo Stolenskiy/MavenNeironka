@@ -21,6 +21,14 @@ public class NeuralNetwork implements Serializable {
                 evolute(0);
         }
 
+        public NeuralBuilder getNeuralBuilder(int index) {
+                return neuralBuilders[index];
+        }
+
+        public void setNeuralBuilder(int index, NeuralBuilder builder) {
+                neuralBuilders[index] = builder;
+        }
+
     public static void serializebleObject(Object obj, String fileName) {
         ObjectOutputStream objectOutputStream = null;
         try {
@@ -62,6 +70,22 @@ public class NeuralNetwork implements Serializable {
             }
         }
         return deserializebleObj;
+    }
+
+    private static <T extends Serializable> T cloneObject(T obj) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                oos.writeObject(obj);
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()))) {
+                @SuppressWarnings("unchecked")
+                T clone = (T) ois.readObject();
+                return clone;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Color getRgbColor(int index) {
@@ -107,11 +131,11 @@ public class NeuralNetwork implements Serializable {
             System.out.println(neuralBuilders[index].changed);
             System.out.println();
         }
-        serializebleObject(neuralBuilders[index], "neuralBilder.obj");
-        neuralBuilders[0] = neuralBuilders[index];
+        NeuralBuilder base = neuralBuilders[index];
+        neuralBuilders[0] = base;
         for (int i = 1; i < neuralBuilders.length; i++) {
             String changed = "";
-            NeuralBuilder cloneNB = (NeuralBuilder) deserializebleObject("neuralBilder.obj");
+            NeuralBuilder cloneNB = cloneObject(base);
             // потрібно трохи змінити нейронну мережу
             /** Ф-ції, які рандомом змінюють нейронну мережу
              * addNewRandomNeuron - 0;
