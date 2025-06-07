@@ -10,5 +10,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers (ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/image_db/**")
                 .addResourceLocations("file:src/main/resources/image_db/");
+        registry.addResourceHandler("/favorite_images/**")
+                .addResourceLocations("file:src/main/resources/favorite_images/");
     }
 }
